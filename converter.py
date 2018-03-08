@@ -3,8 +3,8 @@ import os
 # define encoding for files
 USE_ENCODING = 'ansi'
 # define folders
-FOLDER_EMAIL_BACKUP = 'email-backup'
-FOLDER_CONVERTED_EMAILS = 'email-backup'
+FOLDER_EMAIL_BACKUP = 'backup'
+FOLDER_CONVERTED_EMAILS = 'converted'
 # define file extension
 BACKUP_EXTENSION = 'txt'
 
