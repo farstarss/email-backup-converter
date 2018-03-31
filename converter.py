@@ -19,14 +19,17 @@ for file in os.listdir(FOLDER_EMAIL_BACKUP):
         fn = os.path.join(FOLDER_EMAIL_BACKUP, file)
         # init file write handler
         f_w = None
-        #
-        j = 1
+
+        line_id = 0
         # print file we are processing
         print("Processing:", fn)
         # open file
         with open(fn, 'r', encoding=USE_ENCODING, errors='replace') as f_r:
+            # reset printed_error state with each file
+            printed_error = False
             # process every line
             for content in f_r:
+                line_id += 1
                 # 'From ' identifies the beginning of a new email
                 if content[:5] == 'From ':
                     # close old file write handler
@@ -34,11 +37,20 @@ for file in os.listdir(FOLDER_EMAIL_BACKUP):
                         f_w.close()
                     # increase email counter
                     email_count += 1
+                    # build destination path
+                    dest_file_name = '{}-{}.txt'.format(file, email_count)
+                    dest_path = os.path.join(FOLDER_CONVERTED_EMAILS, dest_file_name)
                     # open new email file in binary mode to avoid encoding issues
-                    f_w = open(FOLDER_CONVERTED_EMAILS + '/{}-{}.txt'.format(file, email_count), 'wb')
-
+                    f_w = open(dest_path, 'wb')
+                # make sure we got a valid file handler and, prior to this, got the right content
+                if f_w is None:
+                    if not printed_error:
+                        printed_error = True
+                        print("Error in line {} in {}. Expected 'From ', got '{}'".format(line_id, fn, content))
+                    continue
                 # write read content as bitarray
                 f_w.write(bytearray(content, encoding=USE_ENCODING, errors='replace'))
+                
 
 # print result
 print("Done converting {} emails.".format(email_count))
