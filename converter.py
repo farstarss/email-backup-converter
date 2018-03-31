@@ -16,7 +16,7 @@ for file in os.listdir(FOLDER_EMAIL_BACKUP):
     # only process txt files
     if file.endswith(".{}".format(BACKUP_EXTENSION)):
         # file name
-        fn = os.path.join(FOLDER_CONVERTED_EMAILS, file)
+        fn = os.path.join(FOLDER_EMAIL_BACKUP, file)
         # init file write handler
         f_w = None
         #
@@ -35,7 +35,7 @@ for file in os.listdir(FOLDER_EMAIL_BACKUP):
                     # increase email counter
                     email_count += 1
                     # open new email file in binary mode to avoid encoding issues
-                    f_w = open('emails-converted/{}-{}.txt'.format(file, email_count), 'wb')
+                    f_w = open(FOLDER_CONVERTED_EMAILS + '/{}-{}.txt'.format(file, email_count), 'wb')
 
                 # write read content as bitarray
                 f_w.write(bytearray(content, encoding=USE_ENCODING, errors='replace'))
